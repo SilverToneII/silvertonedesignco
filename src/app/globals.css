@@ -1,27 +1,136 @@
+/* ──────────────────────────────────────────────────────────────────────
+ * Silvertone Design Co. — globals.css
+ * Spec: §4.3.1 (font loading), §4.5 (hairline), §13.4 (reduced motion),
+ *       §16.2 (focus indicator). A2 overrides applied where relevant.
+ *
+ * Note: For Step 1 we ship the Fontshare CDN @import only.
+ * Step 2 adds self-hosted /public/fonts/ fallbacks per §A5.6 (mandatory).
+ * ────────────────────────────────────────────────────────────────────── */
+
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=general-sans@400,500,600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Font stacks — see §4.3.1.
+   * --font-jetbrains-mono is injected by next/font in app/layout.tsx
+   * (variable: '--font-jetbrains-mono'); this avoids shadowing --font-mono. */
+  --font-display: 'Clash Display', 'Söhne', system-ui, sans-serif;
+  --font-body: 'General Sans', 'Inter', system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), 'SF Mono', Menlo, monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    color-scheme: dark; /* §A3.9: dark only for v1 */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: theme('colors.ink.base');
+    color: theme('colors.bone.base');
+    font-family: theme('fontFamily.body');
+    font-size: theme('fontSize.body[0]');
+    line-height: theme('fontSize.body[1].lineHeight');
+    font-weight: 400;
+  }
+
+  /* Display family always weight 500 (§4.3.2 weight column). */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: theme('fontFamily.display');
+    font-weight: 500;
+  }
+
+  /* Selection — monochrome, not the default browser blue. */
+  ::selection {
+    background-color: theme('colors.bone.base');
+    color: theme('colors.ink.base');
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* ────────────────────────────────────────────────────────────────
+   * Hairline divider — §4.5 + §A5.2 defensive fallback.
+   * 1px on non-retina; 0.5px on retina to feel hairline.
+   * ──────────────────────────────────────────────────────────────── */
+  .divider-hair {
+    border-top: 1px solid theme('colors.ink.border');
+  }
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .divider-hair {
+      border-top-width: 0.5px;
+    }
+  }
+
+  .divider-hair-bright {
+    border-top: 1px solid theme('colors.ink.bright');
+  }
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .divider-hair-bright {
+      border-top-width: 0.5px;
+    }
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+ * Focus indicator — §16.2.
+ * 2px solid bone.base, 2px offset, square corners (override pill where used).
+ * ────────────────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid theme('colors.bone.base');
+  outline-offset: 2px;
+  border-radius: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+ * Reduced-motion — §13.4 (mandatory).
+ * Lenis, ScrollTrigger reveals, mobile menu slide, header hide-on-scroll
+ * all respect this individually (Step 5+); this CSS is the floor.
+ * ────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────────────
+ * Print — §5.4. Forces light theme, hides nav/footer/decorative motion.
+ * ────────────────────────────────────────────────────────────────────── */
+@media print {
+  html {
+    color-scheme: light;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  nav,
+  footer,
+  [data-hover-image] {
+    display: none !important;
+  }
+  * {
+    animation: none !important;
+    transition: none !important;
   }
 }
