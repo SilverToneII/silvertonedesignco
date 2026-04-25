@@ -1,37 +1,38 @@
 /**
- * Step 1 placeholder home page.
+ * Step 4 placeholder home page.
  * Real home page is built in Step 7 per §10.1.
  *
- * Purpose: exercise every token family loaded in Step 1 so the verification
- * gate ("default page loads with correct fonts visible in DevTools") has
- * something to inspect against §4.3.2 / §A2.1 / §A2.2.
+ * Renders inside <main id="main"> from app/layout.tsx, so this file
+ * uses a fragment / div, never its own <main>.
+ *
+ * Padding-top accounts for the fixed header height (56/64/72 per §5.2);
+ * Step 7's hero will set its own header-aware top padding.
  */
-export default function Step1Placeholder() {
+import { Section } from '@/components/layout'
+import { DisplayHeading, Eyebrow } from '@/components/primitives'
+
+export default function Step4Placeholder() {
   return (
-    <main className="flex min-h-screen flex-col items-start justify-center gap-10 px-6 md:px-10 lg:px-14">
-      <p className="font-mono text-mono-sm uppercase text-bone-faint">
-        <span aria-hidden="true">( 001 ) — </span>SCAFFOLD INITIALIZED
-      </p>
-
-      <h1 className="font-display text-display-lg text-bone-base">
+    <Section size="loose" className="pt-32 md:pt-40 lg:pt-48">
+      <Eyebrow number="001" label="Scaffold initialized" />
+      <DisplayHeading
+        as="h1"
+        size="display-lg"
+        balance
+        className="mt-10 max-w-[14ch]"
+      >
         Silvertone Design Co.
-      </h1>
-
-      <p className="max-w-xl font-body text-body-lg text-bone-muted">
-        Step 1 of 16 complete. Design tokens, fonts, and reduced-motion floor
-        wired in. Build proceeds at Step 2 (asset setup).
+      </DisplayHeading>
+      <p className="mt-8 max-w-prose font-body text-body-lg text-bone-muted">
+        Step 4 of 16 complete. Layout shell wired — skip link, fixed header
+        with scroll state machine, mobile menu with focus trap, footer with
+        the practice signature, and Lenis smooth scroll over a
+        GSAP&nbsp;ScrollTrigger ticker. Real home page lands at Step 7.
       </p>
-
-      <div className="divider-hair w-full max-w-xl" />
-
-      <ul className="grid w-full max-w-xl grid-cols-2 gap-y-2 font-mono text-mono-sm text-bone-muted">
-        <li>display</li>
-        <li className="font-display text-bone-base">Clash Display 500</li>
-        <li>body</li>
-        <li className="font-body text-bone-base">General Sans 400</li>
-        <li>mono</li>
-        <li className="font-mono text-bone-base">JetBrains Mono 400</li>
-      </ul>
-    </main>
+      <p className="mt-10 font-mono text-mono-sm uppercase text-bone-faint">
+        Visit <a href="/styleguide" className="link-underline text-bone-base">/styleguide</a> for
+        the design system reference.
+      </p>
+    </Section>
   )
 }

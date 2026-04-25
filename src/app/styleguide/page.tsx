@@ -250,7 +250,9 @@ function SubsectionLabel({ children }: { children: React.ReactNode }) {
 
 export default function StyleguidePage() {
   return (
-    <main className="min-h-screen pb-32">
+    // Renders inside <main id="main"> from app/layout.tsx — use a div.
+    // Top padding accounts for fixed header (§5.2 heights).
+    <div className="pt-20 md:pt-24 lg:pt-28">
       {/* ── Header ─────────────────────────────────────────────────── */}
       <Section size="default">
         <Eyebrow number="000" label="Internal — design system reference" />
@@ -549,11 +551,10 @@ export default function StyleguidePage() {
           Reveals & easing.
         </DisplayHeading>
         <p className="mt-8 max-w-prose font-body text-body text-bone-muted">
-          Lenis smooth-scroll, RevealOnScroll, hover image, and motion tokens
-          land in <span className="text-bone-base">Step 5</span>. This section
-          will fill in after the motion infrastructure ships.
+          Lenis smooth-scroll is live (Step 4) — try scrolling. RevealOnScroll
+          animations and the cursor-following hover image land in Step 5.
         </p>
       </Section>
-    </main>
+    </div>
   )
 }

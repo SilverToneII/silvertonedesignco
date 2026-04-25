@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
+import { Footer, Header, SkipLink } from '@/components/layout'
+import { LenisProvider } from '@/components/motion'
 import './globals.css'
 
 /**
@@ -61,7 +63,19 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {/* §12.11 — first focusable element in the document */}
+        <SkipLink />
+        <LenisProvider>
+          <Header />
+          {/* §12.11 — skip-link target. tabIndex=-1 so it can receive
+              programmatic focus without being in the natural tab order. */}
+          <main id="main" tabIndex={-1} className="outline-none">
+            {children}
+          </main>
+          <Footer />
+        </LenisProvider>
+      </body>
     </html>
   )
 }

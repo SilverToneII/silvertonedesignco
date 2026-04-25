@@ -102,6 +102,32 @@
       border-top-width: 0.5px;
     }
   }
+
+  /* ────────────────────────────────────────────────────────────────
+   * Underline draw on hover — §14.2.
+   * Used on body links (e.g. "Read more →"). Nav links roll their own
+   * underline span so the active route can pin scale-x:1 alongside
+   * hover/focus.
+   * ──────────────────────────────────────────────────────────────── */
+  .link-underline {
+    position: relative;
+  }
+  .link-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 300ms cubic-bezier(0.25, 1, 0.5, 1);
+  }
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    transform: scaleX(1);
+  }
 }
 
 @layer utilities {

@@ -1,5 +1,8 @@
 /**
  * Barrel export for layout primitives.
- * Header / Footer / MobileMenu / SkipLink land in Step 4.
  */
 export { Section } from './Section'
+export { SkipLink } from './SkipLink'
+export { Header } from './Header'
+export { MobileMenu } from './MobileMenu'
+export { Footer } from './Footer'
