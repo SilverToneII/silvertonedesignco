@@ -3,11 +3,34 @@
  * Spec: §4.3.1 (font loading), §4.5 (hairline), §13.4 (reduced motion),
  *       §16.2 (focus indicator). A2 overrides applied where relevant.
  *
- * Note: For Step 1 we ship the Fontshare CDN @import only.
- * Step 2 adds self-hosted /public/fonts/ fallbacks per §A5.6 (mandatory).
+ * Self-hosted variable fonts per Addendum A §A5.6 (mandatory).
+ * Local /public/fonts/ files first, Fontshare CDN as fallback so the
+ * site degrades gracefully if /fonts/ ever 404s in production.
  * ────────────────────────────────────────────────────────────────────── */
 
-@import url('https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=general-sans@400,500,600&display=swap');
+@font-face {
+  font-family: 'Clash Display';
+  src:
+    url('/fonts/ClashDisplay-Variable.woff2') format('woff2-variations'),
+    url('/fonts/ClashDisplay-Variable.woff2') format('woff2'),
+    url('//cdn.fontshare.com/wf/DK2FOA46SRWJ5HXWWU5TK4N4CMHYD236/FPEAXZZSH5L2K5MTJFRIWD2MC32IJMN3/THOOS4VOCKT7H2XEB27NQDYM2NYS4AAR.woff2')
+      format('woff2');
+  font-weight: 200 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src:
+    url('/fonts/GeneralSans-Variable.woff2') format('woff2-variations'),
+    url('/fonts/GeneralSans-Variable.woff2') format('woff2'),
+    url('//cdn.fontshare.com/wf/LHQJ5KSAL7VGAEIDSTEXCCOIUKFLT2I6/GW57XUEG4ZBVMLZZTQZTGYPROITRRQ5W/JA3IZUEMJ2J6WWT2OQVJOAWDXO3YL4YG.woff2')
+      format('woff2');
+  font-weight: 200 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
