@@ -130,6 +130,33 @@
   }
 }
 
+/* ──────────────────────────────────────────────────────────────────────
+ * Reveal-on-scroll initial state — §12.13 + §A2.4.2
+ *
+ * <RevealOnScroll> sets data-reveal-self (single-target) or
+ * data-reveal-children (stagger>0). We hide those before GSAP attaches
+ * so above-fold content never flashes visible-then-hidden during
+ * hydration. The .js gate (added by the inline script in app/layout.tsx)
+ * ensures users with JS disabled never see permanently-hidden content.
+ *
+ * --reveal-y is set inline by the component to the configured yOffset.
+ * ────────────────────────────────────────────────────────────────────── */
+.js [data-reveal-self],
+.js [data-reveal-children] > * {
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-y, 32px), 0);
+  will-change: opacity, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal-self],
+  .js [data-reveal-children] > * {
+    opacity: 1;
+    transform: none;
+    will-change: auto;
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

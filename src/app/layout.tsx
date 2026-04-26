@@ -47,6 +47,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={jetbrainsMono.variable}>
       <head>
+        {/* Add <html class="js"> before paint so [data-reveal-*] hides
+            initial state ONLY when JS is available. JS-disabled users
+            bypass the reveal hidden state entirely. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: 'document.documentElement.classList.add("js")',
+          }}
+        />
         {/* §8.4 — preload self-hosted variable fonts for first-paint hierarchy. */}
         <link
           rel="preload"

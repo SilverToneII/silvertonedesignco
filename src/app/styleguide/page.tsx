@@ -17,6 +17,7 @@ import {
   Wordmark,
 } from '@/components/primitives'
 import { Section } from '@/components/layout'
+import { RevealOnScroll } from '@/components/motion'
 
 // ──────────────────────────────────────────────────────────────────────
 // Reference data
@@ -544,16 +545,88 @@ export default function StyleguidePage() {
 
       <Divider />
 
-      {/* ── Motion (placeholder until Step 5) ──────────────────────── */}
-      <Section size="default">
+      {/* ── Motion ─────────────────────────────────────────────────── */}
+      <Section size="default" id="motion" aria-labelledby="motion-heading">
         <Eyebrow number="006" label="Motion" />
-        <DisplayHeading as="h2" size="h1" className="mt-10">
+        <DisplayHeading
+          as="h2"
+          id="motion-heading"
+          size="h1"
+          className="mt-10"
+        >
           Reveals & easing.
         </DisplayHeading>
-        <p className="mt-8 max-w-prose font-body text-body text-bone-muted">
-          Lenis smooth-scroll is live (Step 4) — try scrolling. RevealOnScroll
-          animations and the cursor-following hover image land in Step 5.
+        <p className="mt-6 max-w-prose font-body text-body text-bone-muted">
+          Lenis smooth-scroll runs over a GSAP ticker; ScrollTrigger
+          fires reveals at <code className="font-mono text-mono-md text-bone-base">top 80%</code> of
+          the viewport. Defaults: <code className="font-mono text-mono-md text-bone-base">yOffset 32</code>,
+          <code className="font-mono text-mono-md text-bone-base"> duration 1000ms</code>,
+          <code className="font-mono text-mono-md text-bone-base"> ease expo.out</code> per §A2.4.2.
+          With <code className="font-mono text-mono-md text-bone-base">prefers-reduced-motion: reduce</code>,
+          all reveals become instant.
         </p>
+
+        {/* Demo 1 — single-element reveal */}
+        <div className="mt-16 border-t border-ink-border pt-10">
+          <SubsectionLabel>
+            &lt;RevealOnScroll&gt; · single element (default 32px / 1000ms)
+          </SubsectionLabel>
+          <RevealOnScroll>
+            <DisplayHeading as="div" size="h2" balance>
+              The work is the work. Make it good, make it true,
+              make it land.
+            </DisplayHeading>
+          </RevealOnScroll>
+        </div>
+
+        {/* Demo 2 — staggered children */}
+        <div className="mt-16 border-t border-ink-border pt-10">
+          <SubsectionLabel>
+            &lt;RevealOnScroll stagger=&#123;120&#125;&gt; · 4-up grid
+          </SubsectionLabel>
+          <RevealOnScroll
+            stagger={120}
+            className="grid grid-cols-2 gap-4 md:grid-cols-4"
+          >
+            {[1, 2, 3, 4].map((n) => (
+              <div
+                key={n}
+                className="flex aspect-square items-end border border-ink-border bg-ink-raised p-4"
+              >
+                <span className="font-mono text-mono-sm uppercase text-bone-muted">
+                  {String(n).padStart(2, '0')} · staggered
+                </span>
+              </div>
+            ))}
+          </RevealOnScroll>
+        </div>
+
+        {/* Demo 3 — custom params */}
+        <div className="mt-16 border-t border-ink-border pt-10">
+          <SubsectionLabel>
+            &lt;RevealOnScroll yOffset=&#123;64&#125; duration=&#123;1400&#125; delay=&#123;200&#125;&gt;
+          </SubsectionLabel>
+          <RevealOnScroll yOffset={64} duration={1400} delay={200}>
+            <p className="font-body text-body-lg text-bone-muted">
+              Larger drop, slower travel, with a 200ms delay. Use sparingly —
+              the standard reveal pattern is the default for a reason.
+            </p>
+          </RevealOnScroll>
+        </div>
+
+        {/* Demo 4 — opt-out for reduced motion users */}
+        <div className="mt-16 border-t border-ink-border pt-10">
+          <SubsectionLabel>
+            &lt;RevealOnScroll respectReducedMotion=&#123;true&#125;&gt;
+          </SubsectionLabel>
+          <p className="font-body text-body-sm text-bone-muted">
+            All reveals on this page respect{' '}
+            <code className="font-mono text-mono-md text-bone-base">prefers-reduced-motion</code>.
+            Toggle the OS setting (macOS: System Settings → Accessibility →
+            Display → Reduce motion) to see content render instantly with
+            no fade-up.
+          </p>
+        </div>
       </Section>
     </div>
   )
