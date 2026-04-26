@@ -104,6 +104,52 @@
   }
 
   /* ────────────────────────────────────────────────────────────────
+   * Works list row hairline — §12.5
+   * Top border that brightens on hover, with retina handling.
+   * ──────────────────────────────────────────────────────────────── */
+  .works-row {
+    border-top: 1px solid theme('colors.ink.border');
+    transition: border-color theme('transitionDuration.base') theme('transitionTimingFunction.out-quart');
+  }
+  .works-row:hover,
+  .works-row:focus-visible {
+    border-top-color: theme('colors.ink.bright');
+  }
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .works-row {
+      border-top-width: 0.5px;
+    }
+  }
+  /* Bottom hairline for the last row */
+  .works-row__bottom {
+    border-top: 1px solid theme('colors.ink.border');
+  }
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .works-row__bottom {
+      border-top-width: 0.5px;
+    }
+  }
+
+  /* ────────────────────────────────────────────────────────────────
+   * Hero divider draw — §10.1.1 mount animation
+   * scaleX 0→1 from left, 1000ms expo, 500ms delay.
+   * ──────────────────────────────────────────────────────────────── */
+  .hero-divider {
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: hero-divider-draw 1000ms cubic-bezier(0.16, 1, 0.3, 1) 500ms forwards;
+  }
+  @keyframes hero-divider-draw {
+    to { transform: scaleX(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-divider {
+      transform: scaleX(1);
+      animation: none;
+    }
+  }
+
+  /* ────────────────────────────────────────────────────────────────
    * Underline draw on hover — §14.2.
    * Used on body links (e.g. "Read more →"). Nav links roll their own
    * underline span so the active route can pin scale-x:1 alongside
