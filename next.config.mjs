@@ -1,4 +1,5 @@
 import nextMDX from '@next/mdx'
+import withBundleAnalyzer from '@next/bundle-analyzer'
 import remarkFrontmatter from 'remark-frontmatter'
 
 /**
@@ -32,4 +33,8 @@ const nextConfig = {
   },
 }
 
-export default withMDX(nextConfig)
+const bundleAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+})
+
+export default bundleAnalyzer(withMDX(nextConfig))

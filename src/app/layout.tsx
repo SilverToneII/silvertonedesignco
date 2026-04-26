@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/react'
 import { Footer, Header, SkipLink } from '@/components/layout'
 import { LenisProvider } from '@/components/motion'
 import './globals.css'
@@ -143,6 +144,8 @@ export default function RootLayout({
           </main>
           <Footer />
         </LenisProvider>
+        {/* §19.1 — Vercel Analytics (privacy-respecting, cookie-free) */}
+        <Analytics />
       </body>
     </html>
   )
