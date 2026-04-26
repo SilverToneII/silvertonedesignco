@@ -96,6 +96,19 @@ owner attention before production deploy.
 
 - **Lint step skipped in CI** due to ESLint peer mismatch above.
 
+## Step 16 (deploy)
+
+- **`bone.faint` color value** bumped from `#6B665F` → `#8B847A`. The
+  §A2.1 contrast table claimed 4.51:1 on `ink.base`; the actual computed
+  ratio is 3.47:1, which fails WCAG AA for normal-size text. Axe caught
+  this in the Step 16 CI run on `/styleguide` (eyebrows, metadata).
+  Honoring the spec's INTENT (AA-compliant tertiary text) over the
+  literal hex. New value computes to 5.27:1, passing AA with a
+  comfortable margin.
+- **`pnpm/action-setup@v4` no longer accepts `version` input** when
+  `package.json` has `packageManager`. Removed `version: 9` from the
+  workflow; pnpm version inferred from `package.json`.
+
 ## Tier 3 owner action items still open (per §A6)
 
 - [ ] LinkedIn URL — placeholder `https://www.linkedin.com/in/labrew-solomon-ii`

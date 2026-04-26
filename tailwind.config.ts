@@ -37,7 +37,12 @@ const config: Config = {
         bone: {
           base: '#F4F1EC',
           muted: '#A8A39C',
-          faint: '#6B665F',
+          // §A2.1 stated #6B665F at 4.51:1 — actual contrast on ink.base
+          // is 3.47:1 (Axe-verified during Step 16 CI run). Bumped to
+          // #8B847A (5.27:1) so eyebrows, metadata, and other 11px text
+          // pass WCAG AA. Honors spec INTENT (AA-compliant) over the
+          // literal hex. Documented in docs/DEVIATIONS.md.
+          faint: '#8B847A',
           ghost: '#3D3A35',
         },
         signal: {
