@@ -120,3 +120,25 @@ export async function getNextWork(currentSlug: string): Promise<Work | null> {
   // Loop back to top per §10.3 "loops from oldest back to newest"
   return works[(idx + 1) % works.length] ?? null
 }
+
+/**
+ * Dynamic-import a work's MDX body component by slug.
+ * Filename convention: `{year}-{slug}.mdx` per §9.3.
+ *
+ * Webpack statically resolves the template-literal path because the
+ * directory is literal — all *.mdx files in src/content/works/ are
+ * bundled at build time and the right one loads per request.
+ */
+export async function getWorkBody(
+  slug: string
+): Promise<React.ComponentType | null> {
+  const work = await getWorkBySlug(slug)
+  if (!work) return null
+  const filename = `${work.year}-${slug}`
+  try {
+    const mod = await import(`@/content/works/${filename}.mdx`)
+    return mod.default as React.ComponentType
+  } catch {
+    return null
+  }
+}

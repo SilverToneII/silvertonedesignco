@@ -1,15 +1,21 @@
 import nextMDX from '@next/mdx'
+import remarkFrontmatter from 'remark-frontmatter'
 
 /**
  * Next config — §21.6 baseline + MDX wiring (§9.3 + §A5.4).
  *
- * MDX files are treated as importable React components. Frontmatter is
- * NOT auto-parsed by @next/mdx; src/lib/content.ts handles that via
- * gray-matter (per §A5.4 working pattern).
+ * MDX files are treated as importable React components. The frontmatter
+ * data itself is parsed by gray-matter at build time in src/lib/content.ts;
+ * remark-frontmatter just strips the YAML block out of the MDX body so
+ * acorn doesn't try to parse `{{ ... }}` placeholders in the frontmatter
+ * as JSX expressions.
  */
 
 const withMDX = nextMDX({
   extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [remarkFrontmatter],
+  },
 })
 
 /** @type {import('next').NextConfig} */
