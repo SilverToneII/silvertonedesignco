@@ -94,6 +94,10 @@ export function MobileMenu({ isOpen, onClose, triggerRef }: MobileMenuProps) {
       role="dialog"
       aria-modal="true"
       aria-label="Navigation menu"
+      // aria-hidden when off-screen so SRs and a11y tooling treat the
+      // closed menu as inert (Playwright's `not.toBeVisible()` doesn't
+      // detect translate-x-full alone).
+      aria-hidden={!isOpen}
       // Always rendered; visibility/translate driven by isOpen so the
       // exit transition can play. pointer-events-none when hidden so
       // tap-throughs don't fire.

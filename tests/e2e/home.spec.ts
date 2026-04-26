@@ -26,11 +26,18 @@ test('mobile menu opens and closes via Escape', async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 667 })
   await page.goto('/')
   await page.getByRole('button', { name: 'Open navigation menu' }).click()
-  await expect(page.getByRole('dialog', { name: 'Navigation menu' })).toBeVisible()
+  // When open: aria-hidden flips off (component sets it to !isOpen)
+  await expect(page.locator('#mobile-menu')).toHaveAttribute(
+    'aria-hidden',
+    'false'
+  )
   await page.keyboard.press('Escape')
-  await expect(
-    page.getByRole('dialog', { name: 'Navigation menu' })
-  ).not.toBeVisible()
+  // When closed: aria-hidden=true. translate-x-full alone doesn't satisfy
+  // Playwright's not.toBeVisible heuristic, so we check the inert flag.
+  await expect(page.locator('#mobile-menu')).toHaveAttribute(
+    'aria-hidden',
+    'true'
+  )
 })
 
 test('work index renders the works list', async ({ page }) => {
@@ -63,7 +70,12 @@ test('connect page renders contact methods', async ({ page }) => {
   await expect(
     page.getByRole('heading', { name: /Let.s work together/ })
   ).toBeVisible()
-  await expect(page.getByText('silvertonedesignco@gmail.com').first()).toBeVisible()
+  // Scope to <main> so the locator doesn't grab the mobile menu or footer
+  // instances of the email — multiple intentional copies sitewide.
+  const main = page.getByRole('main')
+  await expect(
+    main.getByRole('link', { name: 'silvertonedesignco@gmail.com' })
+  ).toBeVisible()
 })
 
 test('404 renders for unknown route', async ({ page }) => {
