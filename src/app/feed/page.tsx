@@ -3,9 +3,16 @@
  *
  * v2 implements a masonry visual journal with Sanity backing per §A3.10.
  */
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Section } from '@/components/layout'
 import { DisplayHeading, Eyebrow } from '@/components/primitives'
+
+export const metadata: Metadata = {
+  title: 'Feed',
+  description:
+    'Visual journal — process notes, references, and works in progress.',
+}
 
 export default function FeedPage() {
   return (

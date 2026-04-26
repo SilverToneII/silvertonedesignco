@@ -9,8 +9,15 @@
  * §A3.6 — experience timeline OMITTED for v1. Owner provides positions
  * later; this page reactivates the section by uncommenting <Experience />.
  */
+import type { Metadata } from 'next'
 import { Section, ConnectBand } from '@/components/layout'
 import { Divider, DisplayHeading, Eyebrow } from '@/components/primitives'
+
+export const metadata: Metadata = {
+  title: 'About / Practice',
+  description:
+    'LaBrew Solomon II — UX/UI and Product Designer based in Richmond, VA. A decade making complex systems feel simple.',
+}
 
 // §7.4 — verbatim, render order matters
 const EXPERTISE = [

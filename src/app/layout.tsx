@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
 import { Footer, Header, SkipLink } from '@/components/layout'
 import { LenisProvider } from '@/components/motion'
@@ -8,11 +8,6 @@ import './globals.css'
  * JetBrains Mono via next/font (§4.3.1 + §17.3).
  * Variable name `--font-jetbrains-mono` is referenced by the `--font-mono`
  * stack in globals.css :root. Subsetted to Latin only.
- *
- * Clash Display + General Sans are loaded as self-hosted variable WOFF2
- * via @font-face in globals.css (Addendum A §A5.6 mandatory). The
- * <link rel="preload"> tags below kick those off in parallel with the
- * critical render path so type doesn't FOIT/FOUT.
  */
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
@@ -21,14 +16,54 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 })
 
+const SITE_URL = 'https://silvertonedesignco.com'
+const SITE_DESCRIPTION =
+  'UX/UI and Product Designer with a decade of experience making complex systems feel simple. Federal, fintech, culture. Richmond, VA.'
+
+// §18.1 — site-level metadata
 export const metadata: Metadata = {
-  // Full site metadata is configured in Step 13 per §18.1.
-  // Step 1 placeholder so the document head isn't blank during dev.
-  // Icons added in Step 2 so /public/* placeholders are actually picked up
-  // by browsers (Next's app/favicon.ico auto-generator was removed there).
-  title: 'Silvertone Design Co.',
-  description:
-    'UX/UI and Product Designer with a decade of experience making complex systems feel simple.',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: 'Silvertone Design Co. — UX/UI & Product Design Studio',
+    template: '%s — Silvertone Design Co.',
+  },
+  description: SITE_DESCRIPTION,
+  authors: [{ name: 'LaBrew Solomon II' }],
+  creator: 'LaBrew Solomon II',
+  applicationName: 'Silvertone Design Co.',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: SITE_URL,
+    siteName: 'Silvertone Design Co.',
+    title: 'Silvertone Design Co. — UX/UI & Product Design Studio',
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Silvertone Design Co. — Design for complex systems.',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Silvertone Design Co.',
+    description: SITE_DESCRIPTION,
+    images: ['/og-image.jpg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
   icons: {
     icon: [
       { url: '/icon-32x32.png', sizes: '32x32', type: 'image/png' },
@@ -39,6 +74,30 @@ export const metadata: Metadata = {
     apple: { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     shortcut: '/favicon.ico',
   },
+  alternates: {
+    canonical: SITE_URL,
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#0A0A0A',
+  colorScheme: 'dark',
+}
+
+// §18.2 — Person JSON-LD
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'LaBrew Solomon II',
+  url: SITE_URL,
+  email: 'silvertonedesignco@gmail.com',
+  jobTitle: 'UX/UI Designer & Product Designer',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Richmond',
+    addressRegion: 'VA',
+    addressCountry: 'US',
+  },
 }
 
 export default function RootLayout({
@@ -47,15 +106,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={jetbrainsMono.variable}>
       <head>
-        {/* Add <html class="js"> before paint so [data-reveal-*] hides
-            initial state ONLY when JS is available. JS-disabled users
-            bypass the reveal hidden state entirely. */}
+        {/* <html class="js"> before paint so [data-reveal-*] gates are
+            JS-conditional. */}
         <script
           dangerouslySetInnerHTML={{
             __html: 'document.documentElement.classList.add("js")',
           }}
         />
-        {/* §8.4 — preload self-hosted variable fonts for first-paint hierarchy. */}
+        {/* §8.4 — preload self-hosted variable fonts. */}
         <link
           rel="preload"
           href="/fonts/ClashDisplay-Variable.woff2"
@@ -70,14 +128,16 @@ export default function RootLayout({
           type="font/woff2"
           crossOrigin="anonymous"
         />
+        {/* §18.2 — Person JSON-LD */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
       </head>
       <body>
-        {/* §12.11 — first focusable element in the document */}
         <SkipLink />
         <LenisProvider>
           <Header />
-          {/* §12.11 — skip-link target. tabIndex=-1 so it can receive
-              programmatic focus without being in the natural tab order. */}
           <main id="main" tabIndex={-1} className="outline-none">
             {children}
           </main>

@@ -3,11 +3,15 @@
  *
  * Renders every primitive in every state, every type token at its actual
  * size, every color swatch with its contrast ratio, and the canonical
- * spacing scale. Step 13 will gate this behind ?dev=true and apply
- * `noindex`. Step 5+ will add motion examples (currently placeholdered).
+ * spacing scale.
  *
  * Server component — no interactivity required at this stage.
+ *
+ * §10.8 — noindex applied via metadata; robots.ts disallows /styleguide.
+ * Production gating behind ?dev=true is not yet wired; currently the
+ * page is reachable on production but excluded from indexing.
  */
+import type { Metadata } from 'next'
 import {
   Divider,
   DisplayHeading,
@@ -18,6 +22,11 @@ import {
 } from '@/components/primitives'
 import { Section } from '@/components/layout'
 import { RevealOnScroll } from '@/components/motion'
+
+export const metadata: Metadata = {
+  title: 'Styleguide',
+  robots: { index: false, follow: false },
+}
 
 // ──────────────────────────────────────────────────────────────────────
 // Reference data

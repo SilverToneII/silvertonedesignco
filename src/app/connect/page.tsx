@@ -4,9 +4,15 @@
  * Hero + 3-col contact methods (Email / Schedule / LinkedIn).
  * No ConnectBand at the bottom — the page IS the connect band.
  */
+import type { Metadata } from 'next'
 import { Section } from '@/components/layout'
 import { Divider, DisplayHeading, Eyebrow } from '@/components/primitives'
 import { CONTACT_LINKS } from '@/lib/nav'
+
+export const metadata: Metadata = {
+  title: 'Connect',
+  description: 'Reach out to connect or collaborate. silvertonedesignco@gmail.com',
+}
 
 export default function ConnectPage() {
   return (

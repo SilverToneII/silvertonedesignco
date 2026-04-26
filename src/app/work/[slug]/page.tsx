@@ -50,6 +50,26 @@ export async function generateMetadata({
   return {
     title: work.title,
     description: work.summary.slice(0, 160),
+    openGraph: {
+      title: work.title,
+      description: work.summary.slice(0, 160),
+      type: 'article',
+      url: `/work/${work.slug}`,
+      images: [
+        {
+          url: work.cover,
+          width: 1600,
+          height: 1200,
+          alt: `${work.title} cover image`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: work.title,
+      description: work.summary.slice(0, 160),
+      images: [work.cover],
+    },
   }
 }
 

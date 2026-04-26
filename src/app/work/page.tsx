@@ -5,10 +5,17 @@
  * Reuses SelectedWorksList client wrapper for the HoverImage + stagger
  * reveal behavior. Filter bar deferred to v1.5 per §10.2.
  */
+import type { Metadata } from 'next'
 import { Section, ConnectBand } from '@/components/layout'
 import { DisplayHeading, Eyebrow } from '@/components/primitives'
 import { SelectedWorksList } from '@/components/compounds'
 import { getAllWorks } from '@/lib/content'
+
+export const metadata: Metadata = {
+  title: 'Selected Work',
+  description:
+    'A decade of UX/UI and product design across federal government, fintech, music & culture, and beyond.',
+}
 
 export default async function WorkIndexPage() {
   const works = await getAllWorks()
